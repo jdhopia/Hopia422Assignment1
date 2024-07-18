@@ -11,10 +11,18 @@ public class PetDatabase {
         loadPetsFromFile();
     }
 
+    // Method to add Pet to the database
     public void addPet(String name, int age) {
-        pets.add(new Pet(name, age));
+        if (pets.size() >= 5) {
+            System.out.println("Error: Database is full.");
+        } else if (age < 1 || age > 20) {
+            System.out.println("Error: " + age + " is not a valid age.");
+        } else {
+            pets.add(new Pet(name, age));
+        }
     }
 
+    // Method to display all Pets in the database
     public void showPets() {
         System.out.println("+-------------------------+");
         System.out.println("| ID  | NAME       |  AGE |");
@@ -26,6 +34,43 @@ public class PetDatabase {
         System.out.println(pets.size() + " rows in set.");
     }
 
+    // Method to Search Pets by name in the database
+    public void searchPetsByName(String name) {
+        System.out.println("+-------------------------+");
+        System.out.println("| ID  | NAME       |  AGE |");
+        System.out.println("+-------------------------+");
+        for (int i = 0; i < pets.size(); i++) {
+            if (pets.get(i).getName().equalsIgnoreCase(name)) {
+                System.out.printf("| %3d | %-10s | %4d |\n", i, pets.get(i).getName(), pets.get(i).getAge());
+            }
+        }
+        System.out.println("+-------------------------+");
+    }
+
+    // Method to Search Pets by age in the database
+    public void searchPetsByAge(int age) {
+        System.out.println("+-------------------------+");
+        System.out.println("| ID  | NAME       |  AGE |");
+        System.out.println("+-------------------------+");
+        for (int i = 0; i < pets.size(); i++) {
+            if (pets.get(i).getAge() == age) {
+                System.out.printf("| %3d | %-10s | %4d |\n", i, pets.get(i).getName(), pets.get(i).getAge());
+            }
+        }
+        System.out.println("+-------------------------+");
+    }
+
+    // Method to update Pet name, age in the database
+    public void updatePet(int id, String newName, int newAge) {
+        if (id >= 0 && id < pets.size()) {
+            pets.get(id).setName(newName);
+            pets.get(id).setAge(newAge);
+        } else {
+            System.out.println("Invalid pet ID.");
+        }
+    }
+
+    // Method to remove a pet from the database
     public void removePet(int id) {
         if (id >= 0 && id < pets.size()) {
             pets.remove(id);
@@ -34,6 +79,7 @@ public class PetDatabase {
         }
     }
 
+    // Load pet data from file
     private void loadPetsFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
             String line;
@@ -50,6 +96,7 @@ public class PetDatabase {
         }
     }
 
+    // Save pet data to file
     private void savePetsToFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_NAME))) {
             for (Pet pet : pets) {
@@ -60,6 +107,7 @@ public class PetDatabase {
         }
     }
 
+    // Main method to run the program
     public void run() {
         while (true) {
             System.out.println("What would you like to do?");
@@ -123,6 +171,7 @@ public class PetDatabase {
         }
     }
 
+    // Main Method
     public static void main(String[] args) {
         new PetDatabase().run();
     }
